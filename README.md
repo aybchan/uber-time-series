@@ -7,4 +7,6 @@ Implementation of paper [Deep and Confident Prediction for Time Series at Uber](
 numpy
 pandas
 torch
+tqdm
+matplotlib
 ```
