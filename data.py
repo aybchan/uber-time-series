@@ -5,20 +5,21 @@ from torch.utils.data import Dataset
 
 class TrafficDataset(Dataset):
     def __init__(self, dataset, set_='train'):
+        self.x_train = dataset['train']['X']
         self.x = dataset[set_]['X']
         self.y = dataset[set_]['y']
         
-        self.mu = np.mean(self.x.reshape(-1,97),axis=0)[:4]
-        self.std = np.std(self.x.reshape(-1,97),axis=0)[:4]
+        self.mu = np.mean(self.x_train.reshape(-1,97),axis=0)[:4]
+        self.std = np.std(self.x_train.reshape(-1,97),axis=0)[:4]
         self.x[:,:,:4] = (self.x[:,:,:4] - self.mu) / self.std
-        self.y = (self.y - self.mu[3])/self.std[3]
+        self.y[:,:,:4] = (self.y[:,:,:4] - self.mu) / self.std
     
     def __len__(self):
         return len(self.y)
         
     def __getitem__(self, idx):
-        x = torch.Tensor(self.x[idx]).float()
-        y = torch.Tensor([self.y]).long()
+        x = torch.Tensor(self.x[:,:,3:4][idx]).float()
+        y = torch.Tensor(self.y[:,:,3][idx]).float()
         return x, y
 
 def download():
@@ -99,7 +100,7 @@ def get_idxs(df, time_steps):
     return np.array(idxs)
 
 
-def samples(df, time_steps=24):
+def samples(df, time_steps=24, y_time_steps=12):
     """
     Return the train/valid/test sets
     """
@@ -110,7 +111,7 @@ def samples(df, time_steps=24):
     valid_start_idx = find_idx_months_from_end(df, 12)
     test_start_idx  = find_idx_months_from_end(df, 6)
     
-    idxs = get_idxs(df, time_steps+1)
+    idxs = get_idxs(df, time_steps+y_time_steps)
     start_idxs = [0, valid_start_idx, test_start_idx, idxs[-1]]
 
     for i,set_ in enumerate(['train', 'valid', 'test']):    
@@ -120,11 +121,11 @@ def samples(df, time_steps=24):
         x_sample = []
         y_sample = []
         for idx_ in idx:
-            datum = data[idx_:idx_+time_steps+1]
-            datum[:,4] -= datum[:,4][0]
+            datum = (data[idx_:idx_+time_steps+y_time_steps]).copy()
+            datum[:,3] -= datum[:,3][0]
             
             x_sample.append(datum[:time_steps])
-            y_sample.append(datum[time_steps:time_steps+1][:,4])
+            y_sample.append(datum[time_steps:time_steps+y_time_steps])
         dataset[set_]['X'] = np.array(x_sample)
         dataset[set_]['y'] = np.array(y_sample)
     
