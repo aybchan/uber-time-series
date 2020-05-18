@@ -6,7 +6,7 @@ class Encoder(nn.Module):
     def __init__(self):
         super(Encoder, self).__init__()
         self.model = nn.ModuleDict({
-            'lstm1': nn.LSTM( 1, 128),
+            'lstm1': nn.LSTM( 97, 128),
             'lstm2': nn.LSTM( 128, 64),
             'lstm3': nn.LSTM( 64,  1),
         })
@@ -40,11 +40,15 @@ class Autoencoder(nn.Module):
         super(Autoencoder, self).__init__()
         self.encoder = Encoder()
         self.decoder = Decoder()
-        self.fc1 = nn.Linear(60,12)
+        self.fc1 = nn.Linear(60,32)
+        self.fc2 = nn.Linear(32,12)
+
     
     def forward(self, x):
         out = self.encoder(x)
-        out = torch.cat((out, x[:,36:]), dim=1)
+        out = torch.cat((out, x[:,36:,3:4]), dim=1)
         out = self.decoder(out)
         out = self.fc1(out.view(-1,60))
+        out = self.fc2(out)
+
         return out

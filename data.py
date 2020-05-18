@@ -5,12 +5,12 @@ from torch.utils.data import Dataset
 
 class TrafficDataset(Dataset):
     def __init__(self, dataset, set_='train'):
-        self.x_train = dataset['train']['X']
-        self.x = dataset[set_]['X']
-        self.y = dataset[set_]['y']
+        self.x_train = dataset['train']['X'].copy()
+        self.x = dataset[set_]['X'].copy()
+        self.y = dataset[set_]['y'].copy()
         
-        self.mu = np.mean(self.x_train.reshape(-1,97),axis=0)[:4]
-        self.std = np.std(self.x_train.reshape(-1,97),axis=0)[:4]
+        self.mu = np.mean(self.x.reshape(-1,97),axis=0)[:4]
+        self.std = np.std(self.x.reshape(-1,97),axis=0)[:4]
         self.x[:,:,:4] = (self.x[:,:,:4] - self.mu) / self.std
         self.y[:,:,:4] = (self.y[:,:,:4] - self.mu) / self.std
     
@@ -18,7 +18,7 @@ class TrafficDataset(Dataset):
         return len(self.y)
         
     def __getitem__(self, idx):
-        x = torch.Tensor(self.x[:,:,3:4][idx]).float()
+        x = torch.Tensor(self.x[:,:,:][idx]).float()
         y = torch.Tensor(self.y[:,:,3][idx]).float()
         return x, y
 
