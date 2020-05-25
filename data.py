@@ -12,6 +12,7 @@ class TrafficDataset(Dataset):
         self.mu = np.mean(self.x.reshape(-1,97),axis=0)[:4]
         self.std = np.std(self.x.reshape(-1,97),axis=0)[:4]
         self.x[:,:,:4] = (self.x[:,:,:4] - self.mu) / self.std
+        self.x[np.isnan(self.x)] = 0
         self.y[:,:,:4] = (self.y[:,:,:4] - self.mu) / self.std
     
     def __len__(self):
