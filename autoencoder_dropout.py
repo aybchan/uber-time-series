@@ -8,16 +8,16 @@ class Encoder(nn.Module):
         super(Encoder, self).__init__()
         self.model = nn.ModuleDict({
             'lstm1': variational_dropout.LSTM( 97, 128,
-                                              dropouti=0.25,
-                                              dropoutw=0.25,
+                                              dropouti=0.,
+                                              dropoutw=0.,
                                               dropouto=0.25),
             'lstm2': variational_dropout.LSTM( 128, 64,
-                                              dropouti=0.25,
-                                              dropoutw=0.25,
+                                              dropouti=0.,
+                                              dropoutw=0.,
                                               dropouto=0.25),
             'lstm3': variational_dropout.LSTM( 64,  1,
-                                              dropouti=0.25,
-                                              dropoutw=0.25,
+                                              dropouti=0.,
+                                              dropoutw=0.,
                                               dropouto=0.25),
         })
         
@@ -34,16 +34,16 @@ class Decoder(nn.Module):
         super(Decoder, self).__init__()
         self.model = nn.ModuleDict({
             'lstm1': variational_dropout.LSTM(  1, 64,
-                                              dropouti=0.25,
-                                              dropoutw=0.25,
+                                              dropouti=0.,
+                                              dropoutw=0.,
                                               dropouto=0.25),
             'lstm2': variational_dropout.LSTM( 64, 128,
-                                              dropouti=0.25,
-                                              dropoutw=0.25,
+                                              dropouti=0.,
+                                              dropoutw=0.,
                                               dropouto=0.25),
             'lstm3': variational_dropout.LSTM(128, 1,
-                                              dropouti=0.25,
-                                              dropoutw=0.25,
+                                              dropouti=0.,
+                                              dropoutw=0.,
                                               dropouto=0.25),
         })
     
