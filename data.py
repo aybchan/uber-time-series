@@ -9,8 +9,8 @@ class TrafficDataset(Dataset):
         self.x = dataset[set_]['X'].copy()
         self.y = dataset[set_]['y'].copy()
         
-        self.mu = np.mean(self.x.reshape(-1,97),axis=0)[:4]
-        self.std = np.std(self.x.reshape(-1,97),axis=0)[:4]
+        self.mu = np.mean(self.x.reshape(-1,self.x.shape[-1]),axis=0)[:4]
+        self.std = np.std(self.x.reshape(-1,self.x.shape[-1]),axis=0)[:4]
         self.x[:,:,:4] = (self.x[:,:,:4] - self.mu) / self.std
         self.x[np.isnan(self.x)] = 0
         self.y[:,:,:4] = (self.y[:,:,:4] - self.mu) / self.std
@@ -31,8 +31,14 @@ def download():
 
 def pipeline():
     df = pd.read_csv('Metro_Interstate_Traffic_Volume.csv')
+    df = df.drop_duplicates()
+
     df['date_time'] = pd.to_datetime(df['date_time'])
-    
+    df = df.sort_values('date_time')
+
+    time_duplicate_idxs = df[df['date_time'].duplicated()].index
+    df = df.drop(time_duplicate_idxs).reset_index(drop=True)
+
     # one hot encode weather descriptions
     dummies = pd.get_dummies(df['weather_description'],prefix='weather')
     df[dummies.columns] = dummies
@@ -43,10 +49,10 @@ def pipeline():
     
     df = df.drop(['weather_main','weather_description','holiday','snow_1h'],axis=1)
     
-    df = df.drop_duplicates()
     df = clean(df)
     df = add_date_features(df)
-    
+    df = df.set_index('date_time')
+
     return df
 
 def clean(df):
@@ -78,8 +84,8 @@ def find_idx_months_from_end(df, months):
     """
     Find the dataframe index that is n months from the most recent data
     """
-    
-    idx = df.date_time[df.date_time > df.date_time.iloc[-1] -np.timedelta64(months,'M')].index[0]
+    t = df.index[-1] - np.timedelta64(months,'M')
+    idx = df.shape[0] - df.index[df.index >t].shape[0]
     return idx
 
 
@@ -88,17 +94,13 @@ def get_idxs(df, time_steps):
     Get starting indices for samples with length `time_steps` with each
     successive time point in the sample being 1 hour apart
     """
-    
-    array = np.array(np.array(df.date_time.values[1:] - 
-                              df.date_time.values[:-1],
-                              dtype='timedelta64[s]'),
-                     np.float32)
-    
-    idxs = []
-    for i,_ in enumerate(array[:-time_steps]):
-        if np.all(array[i:i+25]==3600):
-            idxs.append(i)
-    return np.array(idxs)
+    shape = [len(df)-time_steps+1, time_steps]
+    strides = (df.index.strides[0],df.index.strides[0]*time_steps)
+    datetimes_strided = np.lib.stride_tricks.as_strided(df.index, shape=shape, strides=(8,8))
+    ends,starts = datetimes_strided[:,[-1,0]].T
+    idxs = np.where(ends-starts == np.timedelta64((time_steps-1)*60*60*int(1e9), 'ns'))[0]
+
+    return idxs
 
 
 def samples(df, time_steps=24, y_time_steps=12):
@@ -106,23 +108,23 @@ def samples(df, time_steps=24, y_time_steps=12):
     Return the train/valid/test sets
     """
     
-    data = df.drop('date_time',axis=1).values
-
+    data = df.values
+    
     dataset = dict()
     valid_start_idx = find_idx_months_from_end(df, 12)
     test_start_idx  = find_idx_months_from_end(df, 6)
     
     idxs = get_idxs(df, time_steps+y_time_steps)
-    start_idxs = [0, valid_start_idx, test_start_idx, idxs[-1]]
+    start_idxs = [idxs[0], valid_start_idx, test_start_idx, idxs[-1]]
 
-    for i,set_ in enumerate(['train', 'valid', 'test']):    
+    for i, set_ in enumerate(['train', 'valid', 'test']):    
         dataset[set_] = dict()
-        idx = idxs[(idxs>=start_idxs[i]) & (idxs<start_idxs[i+1])]
+        set_idxs = idxs[(idxs>=start_idxs[i]) & (idxs<start_idxs[i+1])]
 
         x_sample = []
         y_sample = []
-        for idx_ in idx:
-            datum = (data[idx_:idx_+time_steps+y_time_steps]).copy()
+        for idx in set_idxs:
+            datum = data[idx : idx+time_steps+y_time_steps].copy()
             datum[:,3] -= datum[:,3][0]
             
             x_sample.append(datum[:time_steps])
