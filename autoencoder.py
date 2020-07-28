@@ -1,12 +1,12 @@
 import torch
 import torch.nn as nn
-
+import torch.nn.functional as F
 
 class Encoder(nn.Module):
     def __init__(self):
         super(Encoder, self).__init__()
         self.model = nn.ModuleDict({
-            'lstm1': nn.LSTM(97, 128),
+            'lstm1': nn.LSTM(95, 128),
             'lstm2': nn.LSTM(128, 64),
             'lstm3': nn.LSTM(64, 1),
         })
