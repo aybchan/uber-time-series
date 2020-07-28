@@ -7,7 +7,7 @@ class Encoder(nn.Module):
     def __init__(self):
         super(Encoder, self).__init__()
         self.model = nn.ModuleDict({
-            'lstm1': variational_dropout.LSTM( 97, 128,
+            'lstm1': variational_dropout.LSTM( 95, 128,
                                               dropouti=0.,
                                               dropoutw=0.,
                                               dropouto=0.25),
