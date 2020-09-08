@@ -1,13 +1,30 @@
 # Bayesian time series prediction
 
-Implementation of paper [Deep and Confident Prediction for Time Series at Uber](https://arxiv.org/abs/1709.01907) in PyTorch using the [Metro Interstate Traffic Volume](https://archive.ics.uci.edu/ml/datasets/Metro+Interstate+Traffic+Volume) dataset.
+End to end implementation of paper [Deep and Confident Prediction for Time Series at Uber](https://arxiv.org/abs/1709.01907) in PyTorch. We use the [Metro Interstate Traffic Volume](https://archive.ics.uci.edu/ml/datasets/Metro+Interstate+Traffic+Volume) multivariate time series dataset for training and eventually predicting traffic volume.
 
-We make use of the implementation of [variational dropout](https://arxiv.org/abs/1512.05287) from [keitakurita/Better_LSTM_PyTorch](https://github.com/keitakurita/Better_LSTM_PyTorch).
+We make use of the implementation of [variational dropout](https://arxiv.org/abs/1512.05287) from [keitakurita/Better_LSTM_PyTorch](https://github.com/keitakurita/Better_LSTM_PyTorch) for the LSTM layers with dropout.
 
-The first four notebooks work up to the full implementation in notebook 5.
+## Workflow
+Code is prototyped in the notebooks in [`notebooks`](notebooks) before being transferred into cleaned up Python scripts for reuse.
 
-## Results
-![Time series predictions 12 steps (hours) into the future with confidence bands](predictions.png)
+- [`notebooks/01_dataset_creation.ipynb`](notebooks/01_dataset_creation.ipynb)
+  - Download dataset from UCI repository, preprocessing, cleaning and feature creation
+  - [`src/data.py`](src/data.py)
+- [`notebooks/02_autoencoder.ipynb`](notebooks/02_autoencoder.ipynb)
+  - Prototype the encoder-decoder part of the model
+  - [`models/autoencoder.py`](models/autoencoder.py)
+
+- `notebooks/03_autoencoder_dropout.ipynb`
+- `notebooks/04_pretraining_hparam_search.ipynb`
+- `notebooks/05_prediction_network.ipynb`
+- `notebooks/06_full_model.ipynb`
+- `notebooks/07_hyperparam_search.ipynb`
+- `notebooks/08_evaluation.ipynb`
+
+
+
+## Plots
+![Time series predictions 12 steps (hours) into the future with confidence bands](docs/predictions.png)
 
 
 ## Requirements
