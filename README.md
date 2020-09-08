@@ -5,7 +5,7 @@ End to end implementation of paper [Deep and Confident Prediction for Time Serie
 We make use of the implementation of [variational dropout](https://arxiv.org/abs/1512.05287) from [keitakurita/Better_LSTM_PyTorch](https://github.com/keitakurita/Better_LSTM_PyTorch) for the LSTM layers with dropout.
 
 ## Workflow
-![model architecture](docs/architecture.png | width=480)
+<img src="docs/architecture.png" width=480 align=center>
 
 Code is prototyped in the notebooks in [`notebooks`](notebooks) before being transferred into cleaned up Python scripts for reuse.
 
