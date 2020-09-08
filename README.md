@@ -10,10 +10,10 @@ Code is prototyped in the notebooks in [`notebooks`](notebooks) before being tra
 
 - [`notebooks/01_dataset_creation.ipynb`](notebooks/01_dataset_creation.ipynb)
   - Download dataset from UCI repository, preprocessing, cleaning and feature creation
-  - [`src/data.py`](src/data.py)
-- [`notebooks/02_autoencoder.ipynb`](notebooks/02_autoencoder.ipynb)
-  - Prototype the encoder-decoder part of the model
-  - [`models/autoencoder.py`](models/autoencoder.py)
+  - → [`src/data.py`](src/data.py)
+- [`notebooks/02_encoder_decoder.ipynb`](notebooks/02_encoder_decoder.ipynb)
+  - Prototype the encoder-decoder pretraining part of the model
+  - → [`models/encoder_decoder.py`](models/encoder_decoder.py)
 
 - `notebooks/03_autoencoder_dropout.ipynb`
 - `notebooks/04_pretraining_hyperparam.ipynb`
