@@ -22,7 +22,7 @@ Code is prototyped in the [`notebooks`](notebooks) before transfer into cleaned 
 
 - [`notebooks/04_pretraining_hyperparam.ipynb`](notebooks/04_pretraining_hyperparam.ipynb)
   - Use [`Ax`](https://github.com/facebook/Ax) for guided hyperparameter search in the pretraining of encoder-decoder. We use GCE compute for GPU acceleration
-  - → [`src/util.py`](src/util.py)
+  - → [`src/utils.py`](src/utils.py)
 
 - `notebooks/05_prediction_network.ipynb`
 - `notebooks/06_full_model.ipynb`
