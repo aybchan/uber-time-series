@@ -7,7 +7,7 @@ We make use of the implementation of [variational dropout](https://arxiv.org/abs
 ## Workflow
 <img src="docs/architecture.png" width=480 align=center>
 
-Code is prototyped in the notebooks in [`notebooks`](notebooks) before being transferred into cleaned up Python scripts for reuse.
+Code is prototyped in the [`notebooks`](notebooks) before transfer into cleaned up Python scripts for reuse.
 
 - [`notebooks/01_dataset_creation.ipynb`](notebooks/01_dataset_creation.ipynb)
   - Download dataset from UCI repository, preprocessing, cleaning and feature creation
@@ -15,6 +15,10 @@ Code is prototyped in the notebooks in [`notebooks`](notebooks) before being tra
 - [`notebooks/02_encoder_decoder.ipynb`](notebooks/02_encoder_decoder.ipynb)
   - Prototype the encoder-decoder pretraining part of the model
   - → [`models/encoder_decoder.py`](models/encoder_decoder.py)
+  - → [`src/utils.py`](src/utils.py)
+- [`notebooks/03_encoder_decoder_dropout.ipynb`](notebooks/03_encoder_decoder_dropout.ipynb)
+  - Prototype the encoder-decoder pretraining part of the model using LSTM cells with dropout ([keitakurita/Better_LSTM_PyTorch](https://github.com/keitakurita/Better_LSTM_PyTorchk))
+  - → [`models/encoder_decoder_dropout.py`](models/encoder_decoder_dropout.py)
 
 - `notebooks/03_autoencoder_dropout.ipynb`
 - `notebooks/04_pretraining_hyperparam.ipynb`
