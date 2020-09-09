@@ -17,11 +17,13 @@ Code is prototyped in the [`notebooks`](notebooks) before transfer into cleaned 
   - → [`models/encoder_decoder.py`](models/encoder_decoder.py)
   - → [`src/utils.py`](src/utils.py)
 - [`notebooks/03_encoder_decoder_dropout.ipynb`](notebooks/03_encoder_decoder_dropout.ipynb)
-  - Prototype the encoder-decoder pretraining part of the model using LSTM cells with dropout ([keitakurita/Better_LSTM_PyTorch](https://github.com/keitakurita/Better_LSTM_PyTorchk))
+  - Prototype the encoder-decoder pretraining part of the model using [LSTM cells with dropout](https://github.com/keitakurita/Better_LSTM_PyTorch)
   - → [`models/encoder_decoder_dropout.py`](models/encoder_decoder_dropout.py)
 
-- `notebooks/03_autoencoder_dropout.ipynb`
-- `notebooks/04_pretraining_hyperparam.ipynb`
+- [`notebooks/04_pretraining_hyperparam.ipynb`](notebooks/04_pretraining_hyperparam.ipynb)
+  - Use [`Ax`](https://github.com/facebook/Ax) for guided hyperparameter search in the pretraining of encoder-decoder. We use GCE compute for GPU acceleration
+  - → [`src/util.py`](src/util.py)
+
 - `notebooks/05_prediction_network.ipynb`
 - `notebooks/06_full_model.ipynb`
 - `notebooks/07_hyperparam_search.ipynb`
