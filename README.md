@@ -42,4 +42,5 @@ pandas
 torch
 tqdm
 matplotlib
+ax-platform
 ```
