@@ -6,7 +6,7 @@ import torch
 from torch.utils.data import Dataset, DataLoader
 from pathlib import Path
 
-DATA = 'data'
+DATA = '../data'
 DATASET = 'Metro_Interstate_Traffic_Volume.csv'
 
 class TrafficDataset(Dataset):
@@ -98,10 +98,10 @@ def download():
         url = 'https://archive.ics.uci.edu/ml/machine-learning-databases/00492/Metro_Interstate_Traffic_Volume.csv.gz'
         subprocess.run(['curl', '-o', f'{DATA}/{DATASET}.gz', url])
         subprocess.run(['gzip', '-d', f'{DATA}/{DATASET}.gz'])
-        print('Downloaded data')
+        print('Downloaded data\n')
 
     else:
-        print('Data already downloaded')
+        print('Data already downloaded\n')
 
 
 def time_preprocessing(df: pd.DataFrame) -> pd.DataFrame:
@@ -205,7 +205,9 @@ def split_dataframe(df: pd.DataFrame) -> dict:
 
     for key,dataset in datasets.items():
         print(dataset.shape[0], key, 'rows from', ranges[key][0], 'to', ranges[key][1])
-
+        
+    print()
+    
     return datasets
 
 
@@ -227,5 +229,7 @@ def create_samples(datasets: dict, n_input_steps: int, n_pred_steps: int) -> dic
         data[key] = samples[useable]
 
         print(data[key].shape[0], f'samples of {n_input_steps} input steps and {n_pred_steps} output steps in', key)
-
+        
+    print()
+    
     return data
