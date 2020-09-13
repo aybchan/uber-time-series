@@ -6,15 +6,17 @@ class VDEncoder(nn.Module):
     def __init__(self, in_features, out_features, p):
         super(VDEncoder, self).__init__()
         self.model = nn.ModuleDict({
-            'lstm1': vd.LSTM(in_features, 32,dropouto=p),
-            'lstm2': vd.LSTM(32, 8, dropouto=p),
-            'lstm3': vd.LSTM(8, out_features, dropouto=p)
+            'lstm1': vd.LSTM(in_features, 32,dropouto=p, batch_first=True),
+            'lstm2': vd.LSTM(32, 8, dropouto=p, batch_first=True),
+            'lstm3': vd.LSTM(8, out_features, dropouto=p, batch_first=True),
+            'relu':  nn.ReLU()
         })
     
     def forward(self, x):
         out, _ = self.model['lstm1'](x)
         out, _ = self.model['lstm2'](out)
         out, _ = self.model['lstm3'](out)
+        out    = self.model['relu'](out)
 
         return out
 
@@ -23,9 +25,9 @@ class VDDecoder(nn.Module):
     def __init__(self, p):
         super(VDDecoder, self).__init__()
         self.model = nn.ModuleDict({
-            'lstm1': vd.LSTM(1, 2, dropouto=p),
-            'lstm2': vd.LSTM(2, 2, dropouto=p),
-            'lstm3': vd.LSTM(2, 1, dropouto=p)
+            'lstm1': vd.LSTM(1, 2, dropouto=p, batch_first=True),
+            'lstm2': vd.LSTM(2, 2, dropouto=p, batch_first=True),
+            'lstm3': vd.LSTM(2, 1, dropouto=p, batch_first=True)
         })
     
     def forward(self, x):
@@ -37,9 +39,10 @@ class VDDecoder(nn.Module):
 
 
 class VDEncoderDecoder(nn.Module):
-    def __init__(self, in_features, output_steps, p):
+    def __init__(self, in_features, input_steps, output_steps, p):
         super(VDEncoderDecoder, self).__init__()
         self.enc_in_features = in_features
+        self.input_steps = input_steps # t in the paper
         self.output_steps = output_steps # f in the paper
         self.enc_out_features = 1
         self.traffic_col = 4
@@ -48,7 +51,7 @@ class VDEncoderDecoder(nn.Module):
         self.model = nn.ModuleDict({
             'encoder': VDEncoder(self.enc_in_features, self.enc_out_features, self.p),
             'decoder': VDDecoder(self.p),
-            'fc1': nn.Linear(60, 32),
+            'fc1': nn.Linear(self.input_steps + self.output_steps, 32),
             'fc2': nn.Linear(32, self.output_steps)
         })
 
@@ -59,7 +62,7 @@ class VDEncoderDecoder(nn.Module):
         decoder_input = torch.cat([out, x_auxiliary], dim=1)
 
         out = self.model['decoder'](decoder_input)
-        out = self.model['fc1'](out.view(-1, 60))
+        out = self.model['fc1'](out.view(-1, self.input_steps + self.output_steps))
         out = self.model['fc2'](out)
 
         return out
