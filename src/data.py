@@ -12,7 +12,7 @@ class TrafficDataset(Dataset):
     """
     PyTorch Dataset class for Metro Traffic dataset
     """
-    def __init__(self, samples, n_input_steps, key='train'):
+    def __init__(self, samples, n_input_steps, key='train', pretraining=True):
         # calculate normalisation parameters for columns
         # `temp`, `rain_1h`, `clouds_all` and `traffic_volume`
         # from training data
@@ -32,7 +32,11 @@ class TrafficDataset(Dataset):
         for c,col in enumerate(cols_to_normalise):
             self.X[:,:,col] = (self.X[:,:,col] - self.train_mu[c])/(self.train_sigma[c])
             self.y[:,:,col] = (self.y[:,:,col] - self.train_mu[c])/(self.train_sigma[c])
-
+        
+        # added from notebook 6 to provide external features for prediction network
+        self.pretraining = pretraining
+        self.prediction_cols = [40, 41, 42, 43, 44, 45, 46, 47, 48, 
+                            49, 50, 51, 52, 53, 54, 55, 56, 57]
 
     def __len__(self):
         return len(self.y)
@@ -40,14 +44,20 @@ class TrafficDataset(Dataset):
 
     def __getitem__(self, idx):
         x = torch.Tensor(self.X[idx,:,:]).float()
-        y = torch.Tensor(self.y[idx,:,4] - self.X[idx,0,4]).float()
+        if self.pretraining:
+            y = torch.Tensor(self.y[idx,:,4] - self.X[idx,0,4]).float()
+        else:
+            y = self.y[idx,:,:].copy()
+            y[:,4] -= self.X[idx,0,4]
+            y = torch.Tensor(y[:,[4] + self.prediction_cols]).float()
+            
         return x, y
 
 
-def get_datasets(samples, n_input_steps):
+def get_datasets(samples, n_input_steps, pretraining=True):
     datasets = {}
     for key, sample in samples.items():
-        datasets[key] = TrafficDataset(samples, n_input_steps, key)
+        datasets[key] = TrafficDataset(samples, n_input_steps, key, pretraining)
 
     return datasets
 

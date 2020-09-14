@@ -90,7 +90,7 @@ def read_json_params(path):
         params = json.load(json_file)
     return params
 
-def hyperparameter_search(n_jobs: int=30, params:dict, name: str='hyperparameter_search'):
+def hyperparameter_search(n_jobs: int, params:dict, name: str='hyperparameter_search'):
     _, _, samples = data.pipeline(params['data']['n_input_steps'], params['data']['n_output_steps'], params['paths']['data'])
     datasets = data.get_datasets(samples, params['data']['n_input_steps'])
 
