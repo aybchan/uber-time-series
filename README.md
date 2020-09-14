@@ -33,9 +33,10 @@ Code is prototyped in the [`notebooks`](notebooks) before transfer into cleaned 
   - → [`models/prediction.py`](models/prediction.py)
 
 
-- `notebooks/07_full_model.ipynb`
-- `notebooks/08_hyperparam_search.ipynb`
-- `notebooks/09_evaluation.ipynb`
+- `notebooks/07_full_inference.ipynb`
+  - Implement the full inference including uncertainty calculation
+- `notebooks/08_evaluation.ipynb`
+  - Evaluate results on test data
 
 
 
