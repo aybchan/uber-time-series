@@ -26,8 +26,13 @@ Code is prototyped in the [`notebooks`](notebooks) before transfer into cleaned 
 - [`notebooks/05_pretraining_embedding.ipynb`](notebooks/05_pretraining_embedding.ipynb)
   - Taking a look at the learned pretraining embedding
   - → [`src/utils.py`](src/utils.py)
+- [`notebooks/06_prediction_network.ipynb`](notebooks/06_prediction_network.ipynb)
+  - Prototype the prediction network and run `Ax` for hyperparameter search
+  - → [`src/utils.py`](src/utils.py)
+  - → [`src/data.py`](src/data.py)
+  - → [`models/prediction.py`](models/prediction.py)
 
-- `notebooks/06_prediction_network.ipynb`
+
 - `notebooks/07_full_model.ipynb`
 - `notebooks/08_hyperparam_search.ipynb`
 - `notebooks/09_evaluation.ipynb`
