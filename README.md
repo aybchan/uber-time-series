@@ -31,17 +31,16 @@ Code is prototyped in the [`notebooks`](notebooks) before transfer into cleaned 
   - → [`src/utils.py`](src/utils.py)
   - → [`src/data.py`](src/data.py)
   - → [`models/prediction.py`](models/prediction.py)
-
-
-- `notebooks/07_full_inference.ipynb`
-  - Implement the full inference including uncertainty calculation
+- [`notebooks/07_full_inference.ipynb`](notebooks/07_full_inference.ipynb)
+  - Implement the full inference including uncertainty calculation algorithms, run the test data through inference and plot results
 - `notebooks/08_evaluation.ipynb`
-  - Evaluate results on test data
+  - Evaluate results 
 
 
 
-## Plots
-![Time series predictions 12 steps (hours) into the future with confidence bands](docs/predictions.png)
+## Results
+Time series predicitons using the full inference algorithm including uncertainty bounds:
+![Time series predictions with test set data](docs/results.png)
 
 
 ## Requirements
