@@ -1,4 +1,5 @@
 # Bayesian time series prediction
+![Time series predictions with test set data](docs/results_top.png)
 
 End to end implementation of paper [Deep and Confident Prediction for Time Series at Uber](https://arxiv.org/abs/1709.01907) in PyTorch. We use the [Metro Interstate Traffic Volume](https://archive.ics.uci.edu/ml/datasets/Metro+Interstate+Traffic+Volume) multivariate time series dataset for training and eventually predicting traffic volume.
 
