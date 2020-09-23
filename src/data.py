@@ -94,6 +94,19 @@ def pipeline(n_input_steps: int, n_pred_steps: int, DATA_PATH: str) -> (pd.DataF
     return df, split_dfs, samples
 
 
+def full_pipeline(params):
+    # run the data preprocessing pipeline to create dataset
+    df, split_dfs, samples = pipeline(params['data']['n_input_steps'], params['models']['prediction']['n_output_steps'], '../data')
+
+    # we modify the get_datasets function to return external features in the y labels
+    datasets = get_datasets(samples, params['data']['n_input_steps'], pretraining=False)
+
+    dataloaders = get_dataloaders(datasets, train_batch_size=256)
+    # nb. batch_size refers to training batch_size which we have previously done hyperparameter
+    # on the pretraining and prediction networks for. it is irrelevant for this notebook because
+    # we will not be training anything
+    return df, dataloaders
+
 def download(DATA_PATH: str):
     """
     https://archive.ics.uci.edu/ml/datasets/Metro+Interstate+Traffic+Volume
