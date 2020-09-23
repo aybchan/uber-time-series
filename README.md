@@ -34,6 +34,7 @@ Code is prototyped in the [`notebooks`](notebooks) before transfer into cleaned 
   - → [`models/prediction.py`](models/prediction.py)
 - [`notebooks/07_full_inference.ipynb`](notebooks/07_full_inference.ipynb)
   - Implement the full inference including uncertainty calculation algorithms, run the test data through inference and plot results
+:x
 - `notebooks/08_evaluation.ipynb`
   - Evaluate results 
 
