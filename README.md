@@ -35,12 +35,24 @@ Code is prototyped in the [`notebooks`](notebooks) before transfer into cleaned 
 - [`notebooks/07_full_inference.ipynb`](notebooks/07_full_inference.ipynb)
   - Implement the full inference including uncertainty calculation algorithms, run the test data through inference and plot results
   - → [`src/inference.py`](src/inference.py)
-- `notebooks/08_evaluation.ipynb`
-  - Evaluate results 
-
-
+- [`notebooks/08_evaluation.ipynb`](notebooks/08_evaluation.ipynb)
+  - Evaluate predictions on the test set by comparing with predictions from [facebook/prophet](https://github.com/facebook/prophet)
+  - → [`src/evaluation.py`](src/evaluation.py)
 
 ## Results
+
+In [`notebooks/08_evaluation.ipynb`](notebooks/08_evaluation.ipynb) Prediction results on the test set are compared to those made with [facebook/prophet](https://github.com/facebook/prophet). 
+
+Results on the classical time series prediction evaluation metrics are presented below:
+
+| Metric                                   |  Uber    | Prophet |
+| ---------------------------------------- | -------- | ------- |
+| Mean absolute error                      | 280.47   | 680.98  |
+| Root mean squared error                  | 490.92   | 955.85  |
+| Mean absolute percentage error           | 0.13     | 0.41    |
+| Symmetric mean absolute percentage error | 0.029    | 0.024   |
+
+
 Time series predicitons using the full inference algorithm including uncertainty bounds:
 ![Time series predictions with test set data](docs/results.png)
 
@@ -53,4 +65,5 @@ torch
 tqdm
 matplotlib
 ax-platform
+fb-prophet
 ```
